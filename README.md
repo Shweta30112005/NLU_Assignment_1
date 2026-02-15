@@ -1,312 +1,282 @@
-Sports vs Politics Text Classification
+# Sports vs Politics Text Classification  
+## Classical Machine Learning Approach
 
-Natural Language Understanding – Assignment 1
+**Course:** Natural Language Processing  
+**Student:** Shweta Mandal  
+**Dataset:** AG News (Filtered: Sports vs Politics)  
+**Samples:** 8000 per class (16000 total)
 
-1. Problem Definition
+---
 
-The objective of this project is to build and compare multiple machine learning models for binary text classification.
+## Abstract
 
-Given a news article, the system must automatically classify it into one of two categories:
+This report presents a detailed study of binary text classification for distinguishing between Sports and Politics news articles using classical machine learning techniques. While modern NLP research emphasizes transformer-based architectures, this project intentionally focuses on interpretable and computationally efficient linear models. Using a balanced subset of the AG News dataset, three feature extraction techniques — Bag of Words (BoW), TF-IDF, and n-grams (1,2) — were evaluated across three classifiers: Multinomial Naive Bayes, Logistic Regression, and Linear Support Vector Machines. Experimental results demonstrate that feature representation plays a more significant role than classifier choice. The best-performing model achieved an accuracy of 96.78% using n-gram features.
 
-Politics
+---
 
-Sport
+## 1. Problem Definition
 
-The task evaluates the effectiveness of different feature representations and classification algorithms in distinguishing between domain-specific news content.
+Text classification is a foundational task in Natural Language Processing (NLP), where the objective is to assign predefined categories to text documents.
 
-The goal is not only to achieve high performance, but also to compare modeling approaches systematically and analyze their behavior.
+The problem addressed in this assignment is binary classification between:
 
-2. Data Source & Labeling
-2.1 Dataset
+- **Sports**
+- **Politics**
 
-The dataset used is the BBC News Dataset, containing professionally written news articles.
+Given a news article, the model must correctly identify its category.
 
-We specifically used:
+Although these domains are generally distinct, real-world articles may contain overlapping vocabulary such as:
 
-Politics articles
+- “national team”
+- “government funding”
+- “election committee”
+- “Olympic policy”
 
-Sport articles
+Thus, the classification task requires models capable of capturing domain-specific lexical patterns.
 
-Total samples: ~928 documents
+---
 
-Politics ≈ 417
+## 2. Data Source & Labeling
 
-Sport ≈ 511
+The dataset was constructed from the AG News dataset using the HuggingFace `datasets` library.
 
-2.2 Labeling
+From the original four categories, two were selected:
 
-Each document is labeled based on its folder category:
+- **World → Treated as Politics**
+- **Sports**
 
-Files inside politics/ → label: Politics
+### Dataset Configuration
 
-Files inside sport/ → label: Sport
+- 8000 samples per class
+- Total: 16000 samples
+- Balanced dataset
+- 80–20 stratified train-test split
+- Random seed fixed at 42
 
-Labels were normalized to ensure consistent formatting.
+The balanced design ensures unbiased evaluation and comparable macro and weighted metrics.
 
-3. Preprocessing
+---
 
-The preprocessing pipeline was intentionally kept minimal to preserve semantic richness while ensuring clean numerical representations.
+## 3. Preprocessing
 
-3.1 Text Cleaning
+The preprocessing pipeline consisted of:
 
-Lowercasing (handled automatically by vectorizers)
+- Lowercasing text
+- Removal of extra whitespace
+- Tokenization handled via scikit-learn vectorizers
+- No aggressive stopword removal (to preserve meaningful bigrams)
+- No stemming or lemmatization
 
-Stopword removal
+To avoid data leakage:
 
-No stemming or lemmatization (to preserve interpretability)
+- Vectorizers were fitted only on training data.
+- The same fitted transformers were applied to the test set.
 
-3.2 Train-Test Split
+Stratified splitting preserved class distribution in both training and testing sets.
 
-Stratified split
+---
 
-80% training, 20% testing
+## 4. Dataset Analysis
 
-Fixed random seed for reproducibility
+The dataset contains clearly domain-specific vocabulary:
 
-Processed data stored as:
+### Sports Articles
+Common terms include:
+- match
+- goal
+- tournament
+- league
+- championship
 
-data/processed/
-    train.csv
-    test.csv
-    complete_dataset.csv
+### Politics Articles
+Common terms include:
+- government
+- minister
+- election
+- policy
+- parliament
 
-4. Dataset Analysis
-4.1 Class Distribution
+However, contextual ambiguity exists in cases such as:
+- “Government funds Olympic training”
+- “Political controversy in sports federation”
 
-The dataset is relatively balanced:
+This overlap motivates the use of contextual feature representations like n-grams.
 
-Politics: ~45%
+---
 
-Sport: ~55%
+## 5. Feature Engineering
 
-This reduces risk of bias toward one class.
+Machine learning models require numerical feature representations. Three approaches were evaluated.
 
-4.2 Separability
+### 5.1 Bag of Words (BoW)
 
-The dataset is highly separable due to domain-specific vocabulary:
+Represents documents as unigram frequency vectors:
 
-Politics examples:
+d = [f(w₁,d), f(w₂,d), ..., f(wₙ,d)]
 
-minister
+Limitation: Ignores word order and contextual relationships.
 
-government
+---
 
-parliament
+### 5.2 TF-IDF
 
-election
+TF-IDF reweights terms based on their corpus-level importance:
 
-Sport examples:
+TF-IDF(t, d) = TF(t, d) × log(N / DF(t))
 
-match
+Where:
+- TF(t, d): Term frequency in document d
+- DF(t): Document frequency of term t
+- N: Total number of documents
 
-goal
+TF-IDF reduces the influence of very common words.
 
-coach
+---
 
-cup
+### 5.3 n-grams (1,2)
 
-This vocabulary distinction contributes to high classification performance.
+Includes both unigrams and bigrams.
 
-5. Feature Engineering
+Examples:
+- prime minister
+- world cup
+- election campaign
 
-Three feature representations were evaluated:
+This captures phrase-level context and significantly improves discrimination.
 
-5.1 Bag of Words (BoW)
+---
 
-CountVectorizer
+## 6. Model Comparison
 
-Unigrams only
+Three classical classifiers were evaluated.
 
-max_features = 12000
+### 6.1 Multinomial Naive Bayes
 
-5.2 TF-IDF
+- Probabilistic model
+- Assumes feature independence
+- Particularly suited for discrete word counts
 
-TfidfVectorizer
+---
 
-Unigrams
+### 6.2 Logistic Regression
 
-Sublinear term frequency scaling
+- Linear classifier
+- Optimizes log-loss
+- Produces probabilistic predictions
 
-5.3 N-grams
+---
 
-TfidfVectorizer
+### 6.3 Linear Support Vector Machine (SVM)
 
-Unigrams + Bigrams
+- Margin-based classifier
+- Effective in high-dimensional sparse feature spaces
+- Strong baseline for text classification
 
-min_df = 2
+All models were implemented using scikit-learn.
 
-max_features = 18000
+---
 
-N-grams allow capturing contextual phrases such as:
+## 7. Evaluation Protocol
 
-“prime minister”
+The experimental setup included:
 
-“world cup”
+- Stratified 80–20 train-test split
+- Random seed = 42
+- 5-fold cross-validation
+- Metrics:
+  - Accuracy
+  - Precision (macro & weighted)
+  - Recall (macro & weighted)
+  - F1-score (macro & weighted)
 
-6. Model Comparison
+Macro and weighted scores were reported due to balanced dataset.
 
-Three machine learning algorithms were evaluated:
+---
 
-6.1 Multinomial Naive Bayes
+## 8. Results & Analysis
 
-Suitable for frequency-based text features
+### Best Model Performance (8000 Samples)
 
-Strong baseline for NLP tasks
+| Model | Feature | Accuracy |
+|--------|----------|----------|
+| Multinomial NB | n-gram (1,2) | **96.78%** |
+| Linear SVM | n-gram (1,2) | 96.75% |
+| Logistic Regression | n-gram (1,2) | 96.75% |
 
-6.2 Logistic Regression
+---
 
-Linear classifier
+### Confusion Matrix
 
-Handles high-dimensional sparse data effectively
+![Confusion Matrix](results/plots/best_confusion_matrix.png)
 
-6.3 Linear Support Vector Machine
+The confusion matrix shows strong diagonal dominance, indicating minimal cross-domain misclassification.
 
-Maximizes decision margin
+---
 
-Strong performance in text classification
+### Accuracy vs Training Time
 
-Total experiments conducted:
+![Accuracy vs Training Time](results/plots/accuracy_vs_training_time.png)
 
-3 models × 3 feature types = 9 experiments
+Linear models show minor accuracy differences but varying computational costs.
 
-7. Evaluation Protocol
-7.1 Cross-Validation
+---
 
-3-fold Stratified Cross-Validation
+### Feature Comparison (Macro F1)
 
-Hyperparameter tuning using GridSearchCV
+![Feature Comparison](results/plots/macro_f1_comparison.png)
 
-Scoring metric: Macro F1
+n-gram features consistently outperform BoW and TF-IDF across all classifiers.
 
-7.2 Test Evaluation
+---
 
-Final evaluation performed on held-out test set using:
+### Key Observations
 
-Accuracy
+- Feature representation influences performance more than classifier choice.
+- n-grams provide the strongest discrimination.
+- BoW performs worst across models.
+- Performance converges as dataset size increases.
+- Macro and weighted F1 scores are nearly identical, confirming balanced evaluation.
 
-Precision (macro & weighted)
+---
 
-Recall (macro & weighted)
+## 9. Discussion
 
-F1-score (macro & weighted)
+The experiments highlight that classical linear models remain highly competitive for domain-specific classification tasks.
 
-Confusion matrix
+The inclusion of bigrams enables capture of meaningful phrases such as:
 
-7.3 Full Dataset Retraining
+- “prime minister”
+- “world cup”
 
-After selecting best hyperparameters, models were retrained on the full dataset for final model storage.
+With increasing dataset size, Naive Bayes becomes increasingly competitive due to improved probability estimation.
 
-8. Results & Analysis
-8.1 Overall Performance
+The minimal performance gap among linear classifiers suggests near-linear separability in the n-gram feature space.
 
-Most models achieved near-perfect performance.
+---
 
-This is expected due to:
+## 10. Limitations
 
-Strong domain separability
+Despite strong performance, limitations remain:
 
-Distinct vocabulary usage
+1. Only classical ML models were evaluated.
+2. No deep learning baselines (e.g., BERT).
+3. Binary classification simplifies real-world complexity.
+4. No extensive hyperparameter tuning.
+5. Static evaluation based on a single split.
 
-Professional journalistic writing
+Future work could include transformer-based models and multi-class experiments.
 
-8.2 Feature Comparison
+---
 
-Observations:
+## 11. Reproducibility
 
-BoW already achieves very high performance.
+The entire pipeline is fully reproducible.
 
-TF-IDF offers slight robustness but minimal improvement.
+To regenerate results:
 
-N-grams do not significantly outperform unigrams due to already strong separability.
-
-8.3 Model Comparison
-
-Naive Bayes performs extremely well due to conditional independence assumption working effectively in this domain.
-
-Logistic Regression and Linear SVM show nearly identical performance.
-
-All models perform well in sparse high-dimensional feature space.
-
-8.4 Training Time vs Performance
-
-Linear models show slightly higher computational cost than Naive Bayes but achieve comparable performance.
-
-9. Discussion
-
-The dataset’s strong vocabulary separation leads to near-linear separability of classes.
-
-Key insights:
-
-Simpler models perform remarkably well.
-
-Feature engineering improvements yield diminishing returns.
-
-Linear classifiers are sufficient for this binary domain classification.
-
-This confirms that classical ML approaches remain highly effective for structured news classification tasks.
-
-10. Limitations
-
-Despite strong performance, the project has several limitations:
-
-Dataset is highly separable; real-world classification may be harder.
-
-Only binary classification considered.
-
-No noisy or informal text data included.
-
-No deep learning models evaluated.
-
-Temporal or stylistic variation not analyzed.
-
-Future improvements could include:
-
-Multi-class classification
-
-Domain transfer experiments
-
-Testing on noisy user-generated content
-
-11. Reproducibility
-
-The project is fully reproducible:
-
-Fixed random seed
-
-Processed dataset stored as CSV
-
-Cross-validation used
-
-All results saved as CSV files
-
-Trained models stored as .pkl files
-
-Visualization scripts included
-
-Folder structure ensures clean separation between:
-
-Raw data
-
-Processed data
-
-Models
-
-Results
-
-Plots
-
-12. Conclusion
-
-This project demonstrates that classical machine learning models combined with effective feature engineering can achieve near-perfect performance on domain-separable text classification tasks.
-
-Key takeaways:
-
-Bag-of-Words remains a strong baseline.
-
-TF-IDF provides robustness but limited improvement here.
-
-Linear SVM and Logistic Regression are highly competitive.
-
-Naive Bayes remains efficient and effective.
-
-The study confirms that for structured, professionally written domain-specific news data, linear models with sparse representations are sufficient for high-accuracy classification.
+```bash
+pip install -r requirements.txt
+python src/generate_raw_data.py
+python src/prepare_dataset.py
+python src/train_models.py
+python src/generate_plots.py
