@@ -1,0 +1,10 @@
+experiment,model,feature,trained_on,full_dataset_size,model_path
+multinomial_nb__bow,multinomial_nb,bow,complete_dataset,16000,/Users/shweta/Desktop/SEM 6/NLU/politics_sports_classifier/NLU_Assignment_1/models/multinomial_nb__bow.pkl
+logistic_regression__bow,logistic_regression,bow,complete_dataset,16000,/Users/shweta/Desktop/SEM 6/NLU/politics_sports_classifier/NLU_Assignment_1/models/logistic_regression__bow.pkl
+linear_svm__bow,linear_svm,bow,complete_dataset,16000,/Users/shweta/Desktop/SEM 6/NLU/politics_sports_classifier/NLU_Assignment_1/models/linear_svm__bow.pkl
+multinomial_nb__tfidf,multinomial_nb,tfidf,complete_dataset,16000,/Users/shweta/Desktop/SEM 6/NLU/politics_sports_classifier/NLU_Assignment_1/models/multinomial_nb__tfidf.pkl
+logistic_regression__tfidf,logistic_regression,tfidf,complete_dataset,16000,/Users/shweta/Desktop/SEM 6/NLU/politics_sports_classifier/NLU_Assignment_1/models/logistic_regression__tfidf.pkl
+linear_svm__tfidf,linear_svm,tfidf,complete_dataset,16000,/Users/shweta/Desktop/SEM 6/NLU/politics_sports_classifier/NLU_Assignment_1/models/linear_svm__tfidf.pkl
+multinomial_nb__ngram,multinomial_nb,ngram,complete_dataset,16000,/Users/shweta/Desktop/SEM 6/NLU/politics_sports_classifier/NLU_Assignment_1/models/multinomial_nb__ngram.pkl
+logistic_regression__ngram,logistic_regression,ngram,complete_dataset,16000,/Users/shweta/Desktop/SEM 6/NLU/politics_sports_classifier/NLU_Assignment_1/models/logistic_regression__ngram.pkl
+linear_svm__ngram,linear_svm,ngram,complete_dataset,16000,/Users/shweta/Desktop/SEM 6/NLU/politics_sports_classifier/NLU_Assignment_1/models/linear_svm__ngram.pkl

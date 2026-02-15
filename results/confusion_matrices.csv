@@ -1,0 +1,10 @@
+experiment,model,feature,politics_pred_politics,politics_pred_sport,sport_pred_politics,sport_pred_sport
+multinomial_nb__bow,multinomial_nb,bow,1515,85,21,1579
+logistic_regression__bow,logistic_regression,bow,1515,85,46,1554
+linear_svm__bow,linear_svm,bow,1505,95,72,1528
+multinomial_nb__tfidf,multinomial_nb,tfidf,1515,85,25,1575
+logistic_regression__tfidf,logistic_regression,tfidf,1518,82,33,1567
+linear_svm__tfidf,linear_svm,tfidf,1519,81,31,1569
+multinomial_nb__ngram,multinomial_nb,ngram,1516,84,19,1581
+logistic_regression__ngram,logistic_regression,ngram,1522,78,26,1574
+linear_svm__ngram,linear_svm,ngram,1523,77,27,1573
