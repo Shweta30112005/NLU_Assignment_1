@@ -211,7 +211,7 @@ Closely following were:
 
 The maximum difference between the top three models is only **0.03%**, indicating strong convergence among linear classifiers when n-gram features are used.
 
-![Accuracy vs Training Time](/NLU_Assignment_1/results/plots/accuracy_vs_training_time.png)
+![Accuracy vs Training Time](results/plots/accuracy_vs_training_time.png)
 
 ### 8.2 Feature-Level Comparison
 
@@ -231,7 +231,7 @@ Observations:
 
 This confirms that contextual phrase information significantly improves classification performance.
 
-![Feature Comparison](/NLU_Assignment_1/results/plots/feature_comparison.png)
+![Feature Comparison](results/plots/feature_comparison.png)
 
 ### 8.3 Classifier-Level Comparison
 
@@ -249,8 +249,8 @@ For the best model (Multinomial NB + n-gram):
 - Politics F1-score: **0.9671**
 - Sport F1-score: **0.9685**
 
-![Macro F1](/NLU_Assignment_1/results/plots/macro_f1_comparison.png)
-![F1 Trend](/NLU_Assignment_1/results/plots/f1_trend.png)
+![Macro F1](results/plots/macro_f1_comparison.png)
+![F1 Trend](results/plots/f1_trend.png)
 
 ### 8.5 Confusion matrix 
 
@@ -261,7 +261,7 @@ Confusion matrix for best model (Multinomial NB + n-gram):
 
 The model shows slightly higher recall for the Sport class.
 
-![Confusion Matrix](/NLU_Assignment_1/results/plots/best_confusion_matrix.png)
+![Confusion Matrix](results/plots/best_confusion_matrix.png)
 
 
 ### 8.6 Cross-Validation Comparison
